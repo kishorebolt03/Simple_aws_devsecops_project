@@ -60,5 +60,7 @@ workflows:
               only:
                 - main
       - trivy-dependency-scan:
-          requires:
-            - /test.*/ 
+          filters:
+            branches:
+              only:
+                - /test.*/ 
