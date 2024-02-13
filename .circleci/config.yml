@@ -3,15 +3,15 @@
 # See: https://circleci.com/docs/configuration-reference
 version: 2.1
 jobs:
-  test:
-    docker:
-      - image: hashicorp/terraform:light
-    steps:
-      - checkout
+  #test:
+    #docker:
+      #- image: hashicorp/terraform:light
+        #steps:
+      #- checkout
       # Replace this with a real test runner invocation
-      - run:
-          name: Run tests
-          command: echo ''
+      #- run:
+        #     name: Run tests
+            #    command: echo ''
   build-and-deploy-infra:
     docker:
       - image: hashicorp/terraform:light
@@ -46,15 +46,15 @@ jobs:
 workflows:
   build-and-deploy-worflow:
     jobs:
-      - test:
-          filters:
-            branches:
-              only:
-                - /test.*/
-                - main
+      #- test:
+      #    filters:
+      #      branches:
+      #        only:
+      #          - /test.*/
+      #          - main
       - build-and-deploy-infra:
           requires:
-            - test
+            #     - test
             - trivy-dependency-scan
   
       - trivy-dependency-scan:
