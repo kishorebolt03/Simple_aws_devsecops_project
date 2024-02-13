@@ -51,16 +51,15 @@ workflows:
             branches:
               only:
                 - /test.*/
+                - main
       - build-and-deploy-infra:
           requires:
             - test
             - trivy-dependency-scan
-          filters:
-            branches:
-              only:
-                - main
+  
       - trivy-dependency-scan:
           filters:
             branches:
               only:
-                - /test.*/ 
+                - /test.*/
+                - main 
