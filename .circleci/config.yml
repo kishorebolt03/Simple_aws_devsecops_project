@@ -53,7 +53,8 @@ workflows:
                 - /test.*/
       - build-and-deploy-infra:
           requires:
-            - /test.*/
+            - test
+            - trivy-dependency-scan
           filters:
             branches:
               only:
