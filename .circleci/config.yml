@@ -44,7 +44,7 @@ jobs:
           path: /tmp/artifacts
 
 workflows:
-  example:
+  build-and-deploy-worflow:
     jobs:
       - test:
           filters:
@@ -58,6 +58,6 @@ workflows:
             branches:
               only:
                 - main
-      - trivya-dependency-scan:
+      - trivy-dependency-scan:
           requires:
             - /test.*/ 
