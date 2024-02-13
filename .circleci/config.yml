@@ -15,19 +15,18 @@ jobs:
   build-and-deploy-infra:
     docker:
       - image: hashicorp/terraform:light
-    working_directory: /root/project/.terraform
     steps:
       - checkout
       # Replace this with steps to build a package, or executable
       - run:
           name: terraform init
-          command: pwd; ls; terraform init
+          command: cd /root/project/.terraform; terraform init
       - run:
           name: terraform plan
-          command: terraform plan -out plan.out
+          command: cd /root/project/.terraform; terraform plan -out plan.out
       - run:
           name: terraform apply
-          command: terraform apply plan.out
+          command: cd /root/project/.terraform; terraform apply plan.out
 
   trivy-dependency-scan:
     description: Trivy Vulnerable Scanner  
