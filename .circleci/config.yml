@@ -13,7 +13,7 @@ jobs:
             sudo apt install unzip curl wget  -y
       - run:
           name: Install AWS CLI  # Installing AWS CLI to push images into ECR
-          command
+          command: |
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" #downloading AWS CLI from original source
             unzip awscliv2.zip
             sudo ./aws/install
@@ -30,7 +30,6 @@ jobs:
           command: |
               docker build --no-cache -t "$ECR_ACCOUNT_URL/$ECR_REPO":latest . 
               docker push "$ECR_ACCOUNT_URL/$ECR_REPO":latest
-
 
   build-and-deploy-infra: #Jon for build and deploy using terraform
     docker:
