@@ -34,7 +34,7 @@ File Path: Repository/printIP/lambda_function.py
 
 Results:
 1. Open the below link in browser
-     - https://s6lfv7tnd5.execute-api.us-east-1.amazonaws.com/prod/printIP
+     - https://m0196to4t7.execute-api.us-east-1.amazonaws.com/prod/printIP
        
 2. cURL command:
 Request:
