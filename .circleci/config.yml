@@ -25,6 +25,7 @@ jobs:
       - run:
           name: Install and Setup AWS creds
           command: |
+              apk update && apk add --no-cache aws-cli && aws --version
               aws configure set region $REGION --profile $PROFILE
               aws configure set aws_access_key_id $ECR_AWS_ACCESS_KEY_ID --profile $PROFILE
               aws configure set aws_secret_access_key $ECR_AWS_SECRET_ACCESS_KEY --profile $PROFILE
