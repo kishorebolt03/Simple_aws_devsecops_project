@@ -30,13 +30,16 @@ jobs:
               aws configure set aws_access_key_id $ECR_AWS_ACCESS_KEY_ID 
               aws configure set aws_secret_access_key $ECR_AWS_SECRET_ACCESS_KEY 
               aws configure list
-              cd /root/project/.terraform
-              #Terraform Init
-              terraform init
-              terraform plan -out plan.out
-              terraform apply plan.out
-          
           no_output_timeout: 20m
+      - run:
+          name: terraform init
+          command: cd /root/project/.terraform; terraform init
+      - run:
+          name: terraform plan
+          command: cd /root/project/.terraform; terraform plan -out plan.out
+      - run:
+          name: terraform apply
+          command: cd /root/project/.terraform; terraform apply plan.out
 
   trivy-dependency-scan:
     description: Trivy Vulnerable Scanner  
