@@ -39,7 +39,7 @@ Results:
 2. cURL command:
 Request:
   ```sh
-    curl https://s6lfv7tnd5.execute-api.us-east-1.amazonaws.com/prod/printIP
+    curl https://m0196to4t7.execute-api.us-east-1.amazonaws.com/prod/printIP
   ```
 Response:
   ```sh
