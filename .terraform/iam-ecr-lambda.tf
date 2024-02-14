@@ -98,14 +98,10 @@ resource "aws_iam_role_policy_attachment" "handler_lambda_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-data "aws_ecr_repository" "printip_ecr_repo" {
-  name = "printip-lambda-image"
-}
-
 resource "aws_lambda_function" "printIP" {
   function_name = "printIP"
   timeout       = 5 # seconds
-  image_uri     = "${data.aws_ecr_repository.printip_ecr_repo.repository_url}:latest"
+  image_uri     = "${aws_ecr_repository.ecr_repo.repository_url}:latest"
   package_type  = "Image"
   role = aws_iam_role.handler_lambda_exec.arn
 }
