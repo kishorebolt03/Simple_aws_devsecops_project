@@ -3,15 +3,38 @@
 # See: https://circleci.com/docs/configuration-reference
 version: 2.1
 jobs:
-  #test:
-    #docker:
-      #- image: hashicorp/terraform:light
-        #steps:
-      #- checkout
-      # Replace this with a real test runner invocation
-      #- run:
-        #     name: Run tests
-            #    command: echo ''
+  build-image:
+    docker:
+      - image: cimg/base:current-22.04
+    working_directory: /home/circleci/project
+    steps:
+      - checkout
+      - run:
+          name: Update OS
+          command: |
+            sudo apt update
+            sudo apt install unzip curl wget  -y
+      - run:
+          name: Install AWS CLI
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - run:
+          name: ECR login
+          command: |
+            docker login --username AWS -p $(AWS_ACCESS_KEY_ID=$ECR_AWS_ACCESS_KEY AWS_SECRET_ACCESS_KEY=$ECR_AWS_SECRET_KEY aws ecr get-login-password --region us-east-1) $ECR_ACCOUNT_URL
+
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
+      - run:
+          name: Docker build
+          command: |
+              docker build --no-cache -t "$ECR_ACCOUNT_URL/$ECR_REPO":latest .
+              docker push "$ECR_ACCOUNT_URL/$ECR_REPO":latest
+
+
   build-and-deploy-infra:
     docker:
       - image: $ECR_TF_IMAGE
@@ -59,17 +82,15 @@ jobs:
 workflows:
   build-and-deploy-worflow:
     jobs:
-      #- test:
-      #    filters:
-      #      branches:
-      #        only:
-      #          - /test.*/
-      #          - main
+      - build-image:
+          filters:
+            branches:
+              only:
+                - main
       - build-and-deploy-infra:
           requires:
-            #     - test
+            - build-image
             - trivy-dependency-scan
-  
       - trivy-dependency-scan:
           filters:
             branches:
