@@ -14,10 +14,21 @@ jobs:
             #    command: echo ''
   build-and-deploy-infra:
     docker:
-      - image: hashicorp/terraform:light
+      - image: $ECR_TF_IMAGE
+        aws_auth:
+          aws_access_key_id: $ECR_AWS_ACCESS_KEY_ID_
+          aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY
+
     steps:
       - checkout
       # Replace this with steps to build a package, or executable
+      - run:
+          name: Install and Setup AWS creds
+          command: |
+              aws configure set region $REGION --profile $PROFILE
+              aws configure set aws_access_key_id $ECR_AWS_ACCESS_KEY_ID --profile $PROFILE
+              aws configure set aws_secret_access_key $ECR_AWS_SECRET_ACCESS_KEY --profile $PROFILE
+              aws configure --profile $PROFILE list
       - run:
           name: terraform init
           command: cd /root/project/.terraform; terraform init
@@ -38,7 +49,7 @@ jobs:
           name: Install and run Trivy
           command: |
             mkdir -p /tmp/artifacts
-            # file system check 
+            # file system andpackage check
             if trivy fs --scanners vuln,secret,misconfig . > /tmp/artifacts/trivy_report ; then echo "#"; exit 0; else echo "Trivy Run Successfully" exit 0; fi            
       - store_artifacts:
           path: /tmp/artifacts
