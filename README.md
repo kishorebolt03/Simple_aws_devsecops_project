@@ -34,16 +34,16 @@ File Path: Repository/printIP/lambda_function.py
 
 Results:
 1. Open the below link in browser
-     - https://m0196to4t7.execute-api.us-east-1.amazonaws.com/prod/printIP
+     - https://7rgwvfza7f.execute-api.us-east-1.amazonaws.com/prod/printIP
        
 2. cURL command:
 Request:
   ```sh
-    curl https://m0196to4t7.execute-api.us-east-1.amazonaws.com/prod/printIP
+    curl https://7rgwvfza7f.execute-api.us-east-1.amazonaws.com/prod/printIP
   ```
 Response:
   ```sh
-  $ curl https://s6lfv7tnd5.execute-api.us-east-1.amazonaws.com/prod/printIP
+  $ curl https://7rgwvfza7f.execute-api.us-east-1.amazonaws.com/prod/printIP
   "Requester IP address: 14.194.85.42\n IP address in Reverse: 42.85.194.14"
   ```
 
