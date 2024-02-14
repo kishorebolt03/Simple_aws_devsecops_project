@@ -32,6 +32,7 @@ resource "aws_lambda_function" "printIP" {
   image_uri     = "${data.aws_ecr_repository.printip_ecr_repo.repository_url}:latest"
   package_type  = "Image"
   role = aws_iam_role.handler_lambda_exec.arn
+  source_code_hash=trimprefix(data.aws_ecr_repository.printip_ecr_repo.id, "sha256:")
 }
 
 

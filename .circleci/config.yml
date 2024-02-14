@@ -59,9 +59,9 @@ jobs:
       - run:
           name: terraform apply
           command: cd /root/project/.terraform; terraform apply plan.out
-      - run:
-          name: Update new image in Lambda
-          command: aws lambda update-function-code --function-name  my-function --image-uri "$ECR_ACCOUNT_URL/$ECR_REPO:latest" 
+            #- run:
+        #name: Update new image in Lambda
+            #command: aws lambda update-function-code --function-name  my-function --image-uri "$ECR_ACCOUNT_URL/$ECR_REPO:latest" 
 
   trivy-dependency-scan:
     description: Trivy Vulnerable Scanner  
