@@ -85,7 +85,7 @@ resource "aws_ecr_repository_policy" "demo-repo-policy" {
 
 resource "null_resource" "update_docker_image" {
   provisioner "local-exec" {
-    working_dir = "dockerimage"
+    working_dir = "/root/project/dockerimage"
     command     = "chmod +x update-image.sh && sh -x update-image.sh"
   }
 
