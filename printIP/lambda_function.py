@@ -1,4 +1,5 @@
 import json
+from flask import Flask, render_template
 
 def handler(event, context):
     print(event)
@@ -10,7 +11,7 @@ def handler(event, context):
         # Your function logic here
         return {
                 'statusCode':200,
-                'body': json.dumps(f"Requester IP : {ip_address}")
+                'body': json.dumps(f"Requester IP address: {ip_address}\n IP address in Reverse: {".".join(ip_address.split('.')[::-1])}")
                 }
 
 if __name__ == "__main__":
