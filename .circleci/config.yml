@@ -1,43 +1,40 @@
-# Couldn't automatically generate a config from your source code.
-# This is a generic template to serve as a base for your custom config
-# See: https://circleci.com/docs/configuration-reference
 version: 2.1
 jobs:
-  build-image:
+  build-image: #Job for building a docker image to be used inside Lambda 
     docker:
-      - image: cimg/base:current-22.04
+      - image: cimg/base:current-22.04 # using the ubuntu 22.04 as we need docker
     working_directory: /home/circleci/project
     steps:
-      - checkout
+      - checkout #copy the code from github into this container
       - run:
-          name: Update OS
+          name: Update OS # Continious update of the image
           command: |
             sudo apt update
             sudo apt install unzip curl wget  -y
       - run:
-          name: Install AWS CLI
-          command: |
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          name: Install AWS CLI  # Installing AWS CLI to push images into ECR
+          command
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" #downloading AWS CLI from original source
             unzip awscliv2.zip
             sudo ./aws/install
       - run:
-          name: ECR login
+          name: ECR login #Docker login into AWS ECR to push the image
           command: |
             docker login --username AWS -p $(AWS_ACCESS_KEY_ID=$ECR_AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$ECR_AWS_SECRET_ACCESS_KEY aws ecr get-login-password --region us-east-1) "$ECR_ACCOUNT_URL"
 
       - setup_remote_docker:
           version: 20.10.14
-          docker_layer_caching: true
+          docker_layer_caching: true #Using CircleCI's caching will help in speeding up the deployment process in CI/CD. 
       - run:
           name: Docker build
           command: |
-              docker build --no-cache -t "$ECR_ACCOUNT_URL/$ECR_REPO":latest .
+              docker build --no-cache -t "$ECR_ACCOUNT_URL/$ECR_REPO":latest . 
               docker push "$ECR_ACCOUNT_URL/$ECR_REPO":latest
 
 
-  build-and-deploy-infra:
+  build-and-deploy-infra: #Jon for build and deploy using terraform
     docker:
-      - image: $ECR_TF_IMAGE
+      - image: $ECR_TF_IMAGE # Custom docker image used for terraform as the 
         aws_auth:
           aws_access_key_id: $ECR_AWS_ACCESS_KEY_ID
           aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY

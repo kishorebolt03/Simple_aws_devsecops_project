@@ -1,5 +1,6 @@
 def handler(event, context):
     print(event)
+    print("Modified")
     method_type=str(event['httpMethod'])
     if (method_type == 'GET'):
         ip_address = event.get('headers', {}).get('X-Forwarded-For', '')
