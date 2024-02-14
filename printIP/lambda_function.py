@@ -1,8 +1,8 @@
 def handler(event, context):
     print(event)
-    #method_type=str(event['requestContext']['http']['method'])
+    method_type=str(event['httpMethod'])
     if (method_type == 'GET'):
-        ip_address = event.get('requestContext', {}).get('headers', {}).get('X-Forwarded-For', '')
+        ip_address = event.get('headers', {}).get('X-Forwarded-For', '')
         print(f"Requester IP: {ip_address}")
         # Your function logic here
         return {
