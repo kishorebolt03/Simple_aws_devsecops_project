@@ -1,4 +1,4 @@
-# deelproject
+# Sample DevSecOps project 
 
 ### Problem Statement
 ```
