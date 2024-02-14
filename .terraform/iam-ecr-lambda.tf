@@ -17,81 +17,9 @@ resource "aws_iam_role" "handler_lambda_exec" {
 POLICY
 }
 
-
-resource "aws_ecr_repository" "ecr_repo" {
-  name                 = "printip-lambda-image"
-  force_delete         = true
-  image_scanning_configuration {
-    scan_on_push = false
-  }
-  encryption_configuration {
-    encryption_type = "KMS"
-  }
-  tags = {
-    Name  = "worker-repository"
-    Group = "test"
-  }
+data "aws_ecr_repository" "printip_ecr_repo" {
+  name = "printip-lambda-image"
 }
-
-resource "aws_ecr_lifecycle_policy" "ecr_policy" {
-  repository = aws_ecr_repository.ecr_repo.name
-
-  policy = <<EOF
-{
-    "rules": [
-        {
-            "rulePriority": 1,
-            "description": "Expire images older than 14 days",
-            "selection": {
-                "tagStatus": "any",
-                "countType": "sinceImagePushed",
-                "countUnit": "days",
-                "countNumber": 14
-            },
-            "action": {
-                "type": "expire"
-            }
-        }
-    ]
-}
-EOF
-}
-
-resource "aws_ecr_repository_policy" "demo-repo-policy" {
-  repository = aws_ecr_repository.ecr_repo.name
-  policy     = <<EOF
-  {
-    "Version": "2008-10-17",
-    "Statement": [
-      {
-        "Sid": "Set the permission for ECR",
-        "Effect": "Allow",
-        "Principal": "*",
-        "Action": [
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:BatchGetImage",
-          "ecr:CompleteLayerUpload",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:GetLifecyclePolicy",
-          "ecr:InitiateLayerUpload",
-          "ecr:PutImage",
-          "ecr:UploadLayerPart"
-        ]
-      }
-    ]
-  }
-  EOF
-}
-
-resource "null_resource" "update_docker_image" {
-  provisioner "local-exec" {
-    working_dir = "/root/project/dockerimage"
-    command     = "chmod +x update-image.sh && sh -x update-image.sh"
-  }
-
-  depends_on = [aws_ecr_repository.ecr_repo, aws_ecr_lifecycle_policy.ecr_policy, aws_ecr_repository_policy.demo-repo-policy]
-}
-
 
 resource "aws_iam_role_policy_attachment" "handler_lambda_policy" {
   role       = aws_iam_role.handler_lambda_exec.name
@@ -101,7 +29,7 @@ resource "aws_iam_role_policy_attachment" "handler_lambda_policy" {
 resource "aws_lambda_function" "printIP" {
   function_name = "printIP"
   timeout       = 5 # seconds
-  image_uri     = "${aws_ecr_repository.ecr_repo.repository_url}:latest"
+  image_uri     = "${data.aws_ecr_repository.printip_ecr_repo.repository_url}:latest"
   package_type  = "Image"
   role = aws_iam_role.handler_lambda_exec.arn
 }
