@@ -1,5 +1,4 @@
 # deelproject
-Interview round II 
 
 ### Problem Statement
 ```
@@ -19,13 +18,31 @@ Feel free to use any tools or technologies you are comfortable with, and ensure 
 1. AWS Lambda (Application runs in the lambda)
 2. AWS API gateway (API proxy)
 3. AWS ECR (Container image registry)
-4. Docker (Container / virtualization)
-5. Python3 (Scripting language used in Web application)
-6. Terraform (IaC used to create the AWS services)
-7. Trivy (Security scanner for IaC and SCA)
-8. CircleCI (CI/CD tool)
-9. Git and Github (for version control)
+4. AWS Cloudwatch Logs (Logging)
+5. Docker (Container / virtualization)
+6. Python3 (Scripting language used in Web application)
+7. Terraform (IaC used to create the AWS services)
+8. Trivy (Security scanner for IaC and SCA)
+9. CircleCI (CI/CD tool)
+10. Git and Github (for version control)
 
 
 ### How it works
+
+
+
+```py
+def handler(event, context):
+    print(event)
+    print("Modified")
+    method_type=str(event['httpMethod'])
+    if (method_type == 'GET'):
+        ip_address = event.get('headers', {}).get('X-Forwarded-For', '')
+        print(f"Requester IP: {ip_address}")
+        # Your function logic here
+        return {
+                'statusCode':200,
+                'body': json.dumps(f"Requester IP address: {ip_address}\n IP address in Reverse: {".".join(ip_address.split('.')[::-1])}")
+                }
+```
 
