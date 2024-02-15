@@ -44,7 +44,7 @@ Request:
 Response:
   ```sh
   $ curl https://7rgwvfza7f.execute-api.us-east-1.amazonaws.com/prod/printIP
-  "Requester IP address: 14.194.85.42\n IP address in Reverse: 42.85.194.14"
+  "Requester IP address: x.x.x.42\n IP address in Reverse: 42.x.x.x"
   ```
 
 ### CI/CD pipeline: 
